@@ -2,13 +2,12 @@ import React from "react";
 import axios from "axios";
 import GithubCard from "./components/GithubCard";
 import "./index.css";
-//import data from "./dummyData";
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      friend: [""],
+      friend: "",
       id: 1,
       name: "",
       username: "",
@@ -22,19 +21,33 @@ class App extends React.Component {
       twitter: "",
     };
   }
-  // const friendsArray = ['Uniloki', 'squishiedragon', 'allraec', 'harvey-magana', 'ariannwyn']
-  // friendsArray.forEach(friend => {})
-  componentDidMount() {}
 
-  componentDidUpdate() {}
+  componentDidMount() {
+    axios.get(`https://api.github.com/users/ariannwyn`).then((response) => {
+      this.setState({
+        name: response.data.name,
+        username: response.data.login,
+        userImg: response.data.avatar_url,
+        location: response.data.location,
+        profile: response.data.html_url,
+        followers: response.data.followers,
+        following: response.data.following,
+        bio: response.data.bio,
+        email: response.data.email,
+        twitter: response.data.twitter_username,
+      });
+    }, []);
+  }
 
-  onSubmit = (e) => {
+  componentDidUpdate() {
+    console.log("Update!");
+  }
+
+  handleChanges = (e) => {
     e.preventDefault();
     this.setState({
       friend: e.target.value,
     });
-    this.fetchFriend(e);
-    console.log(this.state.friend);
   };
 
   fetchFriend = (e) => {
@@ -43,7 +56,6 @@ class App extends React.Component {
       .get(`https://api.github.com/users/${this.state.friend}`)
       .then((response) => {
         this.setState({
-          friend: [...this.state.friend, this.state.friend],
           name: response.data.name,
           username: response.data.login,
           userImg: response.data.avatar_url,
@@ -56,40 +68,13 @@ class App extends React.Component {
           twitter: response.data.twitter_username,
         });
       }, []);
-    console.log(this.state.friend);
   };
-
-  //  fetchFriend = (e) => {
-  //     e.preventDefault();
-  //     axios
-  //       .get(`https://api.github.com/users/${this.state.friend}`)
-  //       .then((response) => {
-  //         this.setState([
-  //           ...this.state,
-  //           {
-  //             name: response.data.name,
-  //             username: response.data.login,
-  //             userImg: response.data.avatar_url,
-  //             location: response.data.location,
-  //             profile: response.data.html_url,
-  //             followers: response.data.followers,
-  //             following: response.data.following,
-  //             bio: response.data.bio,
-  //             email: response.data.email,
-  //             twitter: response.data.twitter_username,
-  //           },
-  //         ]);
-  //       }, [])
-  //       .catch((err) => {
-  //         console.log(err, "error");
-  //       });
-  //   };
 
   render() {
     return (
       <div className="container">
         <h1>My Github Friends!</h1>
-        <form onSubmit={this.onSubmit}>
+        <form onSubmit={this.fetchFriend}>
           <input type="text" onChange={this.handleChanges} />
           <button type="submit">Find Friend!</button>
         </form>

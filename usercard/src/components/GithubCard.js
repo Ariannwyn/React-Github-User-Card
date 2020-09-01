@@ -2,7 +2,6 @@ import React from "react";
 
 class GithubCard extends React.Component {
   render() {
-    console.log("card", this.props);
     return (
       <div className="card">
         <div className="card-info">
