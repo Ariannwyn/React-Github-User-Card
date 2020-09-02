@@ -18,7 +18,7 @@ class App extends React.Component {
       .get(`https://api.github.com/users/${this.state.friend}`)
       .then((response) => {
         this.setState({
-          followerCard: response.data,
+          followers: [response.data],
         });
       })
       .catch((error) => console.log(error));
@@ -42,28 +42,29 @@ class App extends React.Component {
           followers: response.data,
         });
       })
-      .catch((error) => console.log(error))
-      .finally(
-        this.state.followers.map((follower) => {
-          axios
-            .get(`https://api.github.com/users/${follower}`)
-            .then((response) => {
-              this.setState({
-                followerCard: [...this.state.followerCard, response.data],
-              });
-            })
-            .catch((error) => console.log(error));
-        })
-      );
+      .catch((error) => console.log(error));
+    // .finally(
+    //   this.state.followers.map((follower) => {
+    //     axios
+    //       .get(`https://api.github.com/users/${follower}`)
+    //       .then((response) => {
+    //         this.setState({
+    //           followerCard: [response.data],
+    //         });
+    //         console.log("hi", this.state.followerCard);
+    //       })
+    //       .catch((error) => console.log(error));
+    //   })
+    // );
   };
 
   render() {
     return (
       <div className="container">
-        <h1>My Github Friends!</h1>
+        <h1>My Github Followers!</h1>
         <form onSubmit={this.onSubmit}>
           <input type="text" onChange={this.handleChanges} />
-          <button type="submit">Find Friend!</button>
+          <button type="submit">Show A Users Followers!</button>
         </form>
         <GithubCard followers={this.state.followers} />
       </div>
