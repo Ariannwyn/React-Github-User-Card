@@ -20,7 +20,7 @@ class App extends React.Component {
         this.setState({
           card: response.data,
         });
-      }, [])
+      })
       .catch((error) => console.log(error));
   }
 
@@ -43,7 +43,7 @@ class App extends React.Component {
         this.setState({
           followers: [...this.state.followers, response.data],
         });
-      }, [])
+      })
       .catch((error) => console.log(error));
   };
 
