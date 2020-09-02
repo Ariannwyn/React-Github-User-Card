@@ -1,24 +1,25 @@
 import React from "react";
 
-class GithubCard extends React.Component {
-  render() {
-    return (
-      <div className="card">
-        <div className="card-info">
-          <img src={this.props.friends.userImg} alt=""></img>
-          <p>{this.props.friends.name}</p>
-          <p>{this.props.friends.username}</p>
-          <p>{this.props.friends.location}</p>
+function GithubCard(props) {
+  console.log(props.friends.followers);
+  return (
+    <div className="card">
+      {props.friends.followers.map((friends) => (
+        <div className="card-info" key={friends.id}>
+          <img src={friends.userImg} alt=""></img>
+          <p>{friends.name}</p>
+          <p>{friends.username}</p>
+          <p>{friends.location}</p>
           <p>Profile:</p>
-          <a href={this.props.friends.profile}></a>
-          <p>{this.props.friends.followers}</p>
-          <p>{this.props.friends.following}</p>
-          <p>{this.props.friends.bio}</p>
-          <p>{this.props.friends.email}</p>
+          <a href={friends.profile}></a>
+          <p>{friends.followers}</p>
+          <p>{friends.following}</p>
+          <p>{friends.bio}</p>
+          <p>{friends.email}</p>
         </div>
-      </div>
-    );
-  }
+      ))}
+    </div>
+  );
 }
 
 export default GithubCard;

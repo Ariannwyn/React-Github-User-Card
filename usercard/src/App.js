@@ -7,36 +7,21 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      friend: "",
-      id: 1,
-      name: "",
-      username: "",
-      userImg: "",
-      location: "",
-      profile: "",
-      followers: "",
-      following: "",
-      bio: "",
-      email: "",
-      twitter: "",
+      friend: "ariannwyn",
+      card: {},
+      followers: [],
     };
   }
 
   componentDidMount() {
-    axios.get(`https://api.github.com/users/ariannwyn`).then((response) => {
-      this.setState({
-        name: response.data.name,
-        username: response.data.login,
-        userImg: response.data.avatar_url,
-        location: response.data.location,
-        profile: response.data.html_url,
-        followers: response.data.followers,
-        following: response.data.following,
-        bio: response.data.bio,
-        email: response.data.email,
-        twitter: response.data.twitter_username,
-      });
-    }, []);
+    axios
+      .get(`https://api.github.com/users/${this.state.friend}`)
+      .then((response) => {
+        this.setState({
+          card: response.data,
+        });
+      }, [])
+      .catch((error) => console.log(error));
   }
 
   componentDidUpdate() {
@@ -50,31 +35,23 @@ class App extends React.Component {
     });
   };
 
-  fetchFriend = (e) => {
+  onSubmit = (e) => {
     e.preventDefault();
     axios
-      .get(`https://api.github.com/users/${this.state.friend}`)
+      .get(`https://api.github.com/users/${this.state.friend}/followers`)
       .then((response) => {
         this.setState({
-          name: response.data.name,
-          username: response.data.login,
-          userImg: response.data.avatar_url,
-          location: response.data.location,
-          profile: response.data.html_url,
-          followers: response.data.followers,
-          following: response.data.following,
-          bio: response.data.bio,
-          email: response.data.email,
-          twitter: response.data.twitter_username,
+          followers: [...this.state.followers, response.data],
         });
-      }, []);
+      }, [])
+      .catch((error) => console.log(error));
   };
 
   render() {
     return (
       <div className="container">
         <h1>My Github Friends!</h1>
-        <form onSubmit={this.fetchFriend}>
+        <form onSubmit={this.onSubmit}>
           <input type="text" onChange={this.handleChanges} />
           <button type="submit">Find Friend!</button>
         </form>
