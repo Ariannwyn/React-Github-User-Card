@@ -8,8 +8,8 @@ class App extends React.Component {
     super();
     this.state = {
       friend: "ariannwyn",
-      card: {},
       followers: [],
+      followerCard: [],
     };
   }
 
@@ -18,15 +18,13 @@ class App extends React.Component {
       .get(`https://api.github.com/users/${this.state.friend}`)
       .then((response) => {
         this.setState({
-          card: response.data,
+          followerCard: response.data,
         });
       })
       .catch((error) => console.log(error));
   }
 
-  componentDidUpdate() {
-    console.log("Update!");
-  }
+  componentDidUpdate() {}
 
   handleChanges = (e) => {
     e.preventDefault();
@@ -41,10 +39,22 @@ class App extends React.Component {
       .get(`https://api.github.com/users/${this.state.friend}/followers`)
       .then((response) => {
         this.setState({
-          followers: [...this.state.followers, response.data],
+          followers: response.data,
         });
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log(error))
+      .finally(
+        this.state.followers.map((follower) => {
+          axios
+            .get(`https://api.github.com/users/${follower}`)
+            .then((response) => {
+              this.setState({
+                followerCard: [...this.state.followerCard, response.data],
+              });
+            })
+            .catch((error) => console.log(error));
+        })
+      );
   };
 
   render() {
@@ -55,9 +65,10 @@ class App extends React.Component {
           <input type="text" onChange={this.handleChanges} />
           <button type="submit">Find Friend!</button>
         </form>
-        <GithubCard friends={this.state} />
+        <GithubCard followers={this.state.followers} />
       </div>
     );
   }
 }
+
 export default App;
