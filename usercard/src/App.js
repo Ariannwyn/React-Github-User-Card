@@ -63,7 +63,11 @@ class App extends React.Component {
       <div className="container">
         <h1>My Github Followers!</h1>
         <form onSubmit={this.onSubmit}>
-          <input type="text" onChange={this.handleChanges} />
+          <input
+            type="text"
+            onChange={this.handleChanges}
+            placeholder="Enter a github username"
+          />
           <button type="submit">Show A Users Followers!</button>
         </form>
         <GithubCard followers={this.state.followers} />
